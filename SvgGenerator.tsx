@@ -36,7 +36,7 @@ class SvgGenerator {
     return bars;
   }
 
-  getTextFromCodesArray(codesArray, firstChar = '') {
+  getTextFromCodesArray(codesArray, firstChar = "") {
     let texts = [];
     let offset = 0;
     codesArray.map(code => {
@@ -45,8 +45,8 @@ class SvgGenerator {
     });
     firstChar &&
       (texts[texts.length] = this.drawTexts(
-        {data: '   ', text: firstChar, firstChar: true},
-        0,
+        { data: "   ", text: firstChar, firstChar: true },
+        0
       ));
     return texts;
   }
@@ -67,16 +67,16 @@ class SvgGenerator {
       this.showText && nLen > 5
         ? this.height - 10 * (this.width / 100)
         : this.height;
-    
+
     for (let i = 0; i < nLen; i++, pos = i) {
       b = data[i];
-      if (b === '1') {
+      if (b === "1") {
         barWidth++;
       } else if (barWidth > 0) {
         rects[rects.length] = this.drawRect(
           offset + i - barWidth,
           barWidth,
-          height,
+          height
         );
         barWidth = 0;
       }
@@ -86,7 +86,7 @@ class SvgGenerator {
       rects[rects.length] = this.drawRect(
         offset + pos - barWidth,
         barWidth,
-        height,
+        height
       );
     }
     return rects;
@@ -96,7 +96,7 @@ class SvgGenerator {
     const onePixel = this.onePixel;
     const x2 = this.leftSpacing + x;
     return `m ${_(x2 * onePixel)} 0 l 0 ${_(height)} l ${_(
-      width * onePixel,
+      width * onePixel
     )} 0 l 0 -${_(height)} z`;
   }
 
@@ -107,14 +107,14 @@ class SvgGenerator {
       _((offset + data.length / 2) * this.onePixel);
     const y = _(this.height - 1);
     const fontSize = this.onePixel * 8;
-    const textAnchor = 'middle';
+    const textAnchor = "middle";
     const text = code.text;
     return {
       x,
       y,
       fontSize,
       textAnchor,
-      text,
+      text
     };
   }
 }

@@ -28,6 +28,7 @@ const JSBarcode = props => {
   const displayBarcode128 = () => {
     const code = BarcodeEncoder.encode(value, format);
     SvgGenerator.setScale(dispData.containerWidth, dispData.containerHeight);
+    SvgGenerator.setShowText(false);
     const barsSVG = SvgGenerator.getPathFromCode(code);
     setDispData({...dispData, barsSVG});
   };
