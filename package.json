@@ -1,17 +1,19 @@
 {
   "name": "react-native-jsbarcode",
   "version": "1.0.0",
-  "description": "",
+  "description": "React Native component to generate barcodes. Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/railsjack/react-native-jsbarcode.git"
+    "url": "git+https://github.com/railsjack/react-native-jsbarcode.git"
   },
-  "license": "Apache 2.0",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "lint": "eslint ./"
   },
-  "keywords": ["react-native", "jsbarcode"],
+  "keywords": [
+    "react-native",
+    "jsbarcode"
+  ],
   "author": "WonSikin <jinnahrae@gmail.com>",
   "dependencies": {
     "jsbarcode": "^3.8.0"
@@ -23,5 +25,10 @@
     "babel-eslint": "^6.1.2",
     "eslint": "^2.13.1",
     "eslint-plugin-react": "^6.8.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/railsjack/react-native-jsbarcode/issues"
+  },
+  "homepage": "https://github.com/railsjack/react-native-jsbarcode#readme",
+  "license": "ISC"
 }
