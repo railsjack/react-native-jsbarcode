@@ -1,6 +1,6 @@
 {
   "name": "rn-jsbarcode",
-  "version": "0.4.1",
+  "version": "0.5.1",
   "description": "React Native component to generate barcodes. Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.",
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import Svg, {Path, Text as SvgText} from 'react-native-svg';
 import BarcodeEncoder from './BarcodeEncoder';
 import SvgGenerator from './SvgGenerator';
@@ -13,6 +13,7 @@ const initialState = {
 
 const JSBarcode = props => {
   const [dispData, setDispData] = useState(initialState);
+  const [hasError, setHasError] = useState(false);
   const {value, format} = props;
 
   const displayBarcode = () => {
@@ -23,27 +24,56 @@ const JSBarcode = props => {
     if (format === 'EAN13') {
       displayBarcodeEAN13();
     }
+
+    if (format === 'EAN8') {
+      displayBarcodeEAN8();
+    }
   };
 
   const displayBarcode128 = () => {
-    const code = BarcodeEncoder.encode(value, format);
-    SvgGenerator.setScale(dispData.containerWidth, dispData.containerHeight);
-    SvgGenerator.setShowText(false);
-    const barsSVG = SvgGenerator.getPathFromCode(code);
-    setDispData({...dispData, barsSVG});
+    try {
+      const code = BarcodeEncoder.encode(value, format);
+      SvgGenerator.setScale(dispData.containerWidth, dispData.containerHeight);
+      SvgGenerator.setShowText(false);
+      const barsSVG = SvgGenerator.getPathFromCode(code);
+      setDispData({...dispData, barsSVG});
+    } catch (e) {
+      setHasError(true);
+    }
   };
 
   const displayBarcodeEAN13 = () => {
-    const codesArray = BarcodeEncoder.encode(value, format);
-    SvgGenerator.setScale(
-      dispData.containerWidth,
-      dispData.containerHeight,
-      5,
-    );
-    SvgGenerator.setShowText(true);
-    const barsSVG = SvgGenerator.getPathFromCodesArray(codesArray);
-    const textsSVG = SvgGenerator.getTextFromCodesArray(codesArray, value[0]);
-    setDispData({...dispData, barsSVG, textsSVG});
+    try {
+      const codesArray = BarcodeEncoder.encode(value, format);
+      SvgGenerator.setScale(
+        dispData.containerWidth,
+        dispData.containerHeight,
+        5,
+      );
+      SvgGenerator.setShowText(true);
+      const barsSVG = SvgGenerator.getPathFromCodesArray(codesArray);
+      const textsSVG = SvgGenerator.getTextFromCodesArray(codesArray, value[0]);
+      setDispData({...dispData, barsSVG, textsSVG});
+    } catch (e) {
+      setHasError(true);
+    }
+  };
+
+  const displayBarcodeEAN8 = () => {
+    try {
+      const codesArray = BarcodeEncoder.encode(value, format);
+      SvgGenerator.setScale(
+        dispData.containerWidth,
+        dispData.containerHeight,
+        5,
+      );
+      SvgGenerator.setShowText(true);
+      const barsSVG = SvgGenerator.getPathFromCodesArray(codesArray);
+      const textsSVG = SvgGenerator.getTextFromCodesArray(codesArray, value[0]);
+      setDispData({...dispData, barsSVG, textsSVG});
+    } catch (e) {
+      setHasError(true);
+    }
   };
 
   const componentDidMount = () => {
@@ -71,21 +101,31 @@ const JSBarcode = props => {
           containerHeight: e.nativeEvent.layout.height,
         });
       }}>
-      <Svg
-        style={{
-          width: dispData.containerWidth,
-          height: dispData.containerHeight,
-        }}
-        viewBox={`0 0 ${dispData.containerWidth} ${dispData.containerHeight}`}>
-        {dispData.barsSVG &&
-          dispData.barsSVG.map((barSVG, index) => 
+      {hasError ? (
+        <Text style={[
+          styles.errorTextStyle, props.errorTextStyle
+        ]}>
+          {props.errorText || 'Invalid code'}
+          {"\n"}
+          {value} (Format: {format})
+        </Text>
+      ) : (
+        <Svg
+          style={{
+            width: dispData.containerWidth,
+            height: dispData.containerHeight,
+          }}
+          viewBox={`0 0 ${dispData.containerWidth} ${dispData.containerHeight}`}>
+          {dispData.barsSVG &&
+          dispData.barsSVG.map((barSVG, index) =>
             <Path fill={props.barColor || 'black'} key={String(index)} d={barSVG} />
           )}
-        {dispData.textsSVG &&
+          {dispData.textsSVG &&
           dispData.textsSVG.map((textSVG, index) => (
-            <SvgText key={String(index)} {...textSVG}>{textSVG.text}</SvgText>
+            <SvgText fill={props.barColor || 'black'} key={String(index)} {...textSVG}>{textSVG.text}</SvgText>
           ))}
-      </Svg>
+        </Svg>
+      )}
     </View>
   );
 };
@@ -97,6 +137,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  errorTextStyle: {
+    fontSize: 18,
+    color: 'black',
+    textAlign: 'center',
+  }
 });
 
 export default JSBarcode;
