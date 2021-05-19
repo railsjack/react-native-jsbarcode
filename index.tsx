@@ -58,7 +58,12 @@ const JSBarcode = props => {
 
   return (
     <View
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: props.backgroundColor || 'white'
+        }
+      ]}
       onLayout={e => {
         setDispData({
           ...dispData,
@@ -73,10 +78,12 @@ const JSBarcode = props => {
         }}
         viewBox={`0 0 ${dispData.containerWidth} ${dispData.containerHeight}`}>
         {dispData.barsSVG &&
-          dispData.barsSVG.map(barSVG => <Path d={barSVG} />)}
+          dispData.barsSVG.map((barSVG, index) => 
+            <Path fill={props.barColor || 'black'} key={String(index)} d={barSVG} />
+          )}
         {dispData.textsSVG &&
-          dispData.textsSVG.map(textSVG => (
-            <SvgText {...textSVG}>{textSVG.text}</SvgText>
+          dispData.textsSVG.map((textSVG, index) => (
+            <SvgText key={String(index)} {...textSVG}>{textSVG.text}</SvgText>
           ))}
       </Svg>
     </View>
@@ -89,7 +96,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
   },
 });
 
